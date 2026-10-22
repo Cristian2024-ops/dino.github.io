@@ -2,36 +2,93 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Chrome T-Rex Animado - Manzana</title>
+    <title>Chrome T-Rex Corregido - Manzana</title>
     <style>
-        body { background-color: #000; color: #0f0; font-family: monospace; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        .game-container { position: relative; width: 600px; height: 150px; border-bottom: 2px solid #0f0; overflow: hidden; background: #111; box-shadow: 0 0 15px #0f0; }
+        body { 
+            background-color: #000; 
+            color: #0f0; 
+            font-family: monospace; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            overflow: hidden; 
+        }
+        .game-container { 
+            position: relative; 
+            width: 600px; 
+            height: 150px; 
+            border-bottom: 2px solid #0f0; 
+            overflow: hidden; 
+            background: #111; 
+            box-shadow: 0 0 15px #0f0; 
+        }
         
-        /* Contenedor del dinosaurio */
-        #dino-container { position: absolute; bottom: 0; left: 50px; width: 44px; height: 47px; }
-        #dino-container.ducking { width: 59px; height: 30px; }
+        /* Caja contenedora con la posición base en el suelo */
+        #dino-container { 
+            position: absolute; 
+            bottom: 0; 
+            left: 50px; 
+            width: 44px; 
+            height: 47px; 
+        }
         
-        /* Ocultar por defecto todos los estados del T-Rex */
-        .dino-sprite { display: none; width: 100%; height: 100%; }
+        /* Ajuste dinámico de dimensiones al agacharse */
+        #dino-container.ducking { 
+            width: 59px; 
+            height: 30px; 
+        }
         
-        /* Control de estados por clases de CSS animadas por JS */
-        .run-1 #dino-run1, .run-2 #dino-run2, .duck-1 #dino-duck1, .duck-2 #dino-duck2, .jump #dino-stand { display: block; }
+        /* Ocultar todas las capas por defecto */
+        .dino-sprite { 
+            display: none; 
+            width: 100%; 
+            height: 100%; 
+        }
         
-        .cactus { position: absolute; bottom: 0; width: 25px; height: 50px; }
-        #score-board { margin-top: 15px; font-size: 1.5rem; letter-spacing: 2px; }
-        #game-over { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2rem; font-weight: bold; text-shadow: 0 0 10px #0f0; }
+        /* Mostrar el gráfico correcto según la clase activa */
+        .run-1 #dino-stand, 
+        .run-legs-1 #dino-run1, 
+        .run-legs-2 #dino-run2, 
+        .duck-1 #dino-duck1, 
+        .duck-2 #dino-duck2 { 
+            display: block; 
+        }
+        
+        .cactus { 
+            position: absolute; 
+            bottom: 0; 
+            width: 25px; 
+            height: 50px; 
+        }
+        #score-board { 
+            margin-top: 15px; 
+            font-size: 1.5rem; 
+            letter-spacing: 2px; 
+        }
+        #game-over { 
+            display: none; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            font-size: 2rem; 
+            font-weight: bold; 
+            text-shadow: 0 0 10px #0f0; 
+        }
     </style>
 </head>
 <body>
 
     <div class="game-container">
-        <!-- Contenedor dinámico del T-Rex -->
         <div id="dino-container" class="run-1">
-            <!-- Estado: Quieto / Saltando -->
-            <svg id="dino-stand" class="dino-sprite" viewBox="0 0 44 47"><path fill="#0f0" d="M22,0h12v2h2v2h2v4h-2v2h-4v2h-6v2h-2v2h-2v2h-2v-2h-2v-2h-2v-4h2v-2h2v-2h2v-2h2v-2h2v-2h2V0z M32,4h2v2h-2V4z M12,18h2v2h-2V18z M10,20h2v2h-2V20z M8,22h2v6h2v2h6v-2h2v-2h4v2h2v2h2v2h-2v2h-2v2h-4v2h-2v2h-2v-2h-2v-2h-4v2h-2v2H8v-2H6v-4H4v-2H2v-2H0v-6h2v2h2v2h2v-4h2v-2h2V20z M14,38h2v4h-2V38z M22,38h2v2h-2V38z M24,40h2v4h-2V40z M12,42h2v4h-2V42z M14,44h4v2h-4V44z M22,42h2v4h-2V42z M24,44h4v2h-4V44z"/></svg>
-            <!-- Estado: Corriendo Pierna Izquierda -->
+            <!-- Estado: Parado / Saltando -->
+            <svg id="dino-stand" class="dino-sprite" viewBox="0 0 44 47"><path fill="#0f0" d="M22,0h12v2h2v2h2v4h-2v2h-4v2h-6v2h-2v2h-2v2h-2v-2h-2v-4h2v-2h2v-2h2v-2h2v-2h2v-2h2V0z M32,4h2v2h-2V4z M12,18h2v2h-2V18z M10,20h2v2h-2V20z M8,22h2v6h2v2h6v-2h2v-2h4v2h2v2h2v2h-2v2h-2v2h-4v2h-2v2h-2v-2h-2v-2h-4v2h-2v2H8v-2H6v-4H4v-2H2v-2H0v-6h2v2h2v2h2v-4h2v-2h2V20z M14,38h2v4h-2V38z M22,38h2v2h-2V38z M24,40h2v4h-2V40z M12,42h2v4h-2V42z M14,44h4v2h-4V44z M22,42h2v4h-2V42z M24,44h4v2h-4V44z"/></svg>
+            <!-- Estado: Corriendo Pata Izquierda -->
             <svg id="dino-run1" class="dino-sprite" viewBox="0 0 44 47"><path fill="#0f0" d="M22,0h12v2h2v2h2v4h-2v2h-4v2h-6v2h-2v2h-2v2h-2v-2h-2v-2h-2v-4h2v-2h2v-2h2v-2h2v-2h2v-2h2V0z M32,4h2v2h-2V4z M12,18h2v2h-2V18z M10,20h2v2h-2V20z M8,22h2v6h2v2h6v-2h2v-2h4v2h2v2h2v2h-2v2h-2v2h-4v2h-2v2h-2v-2h-2v-2h-4v2h-2v2H8v-2H6v-4H4v-2H2v-2H0v-6h2v2h2v2h2v-4h2v-2h2V20z M14,38h2v4h-2V38z M22,38h2v4h-2V38z M14,42h2v2h-2V42z M22,42h2v2h-2V42z M24,44h2v2h-2V44z"/></svg>
-            <!-- Estado: Corriendo Pierna Derecha -->
+            <!-- Estado: Corriendo Pata Derecha -->
             <svg id="dino-run2" class="dino-sprite" viewBox="0 0 44 47"><path fill="#0f0" d="M22,0h12v2h2v2h2v4h-2v2h-4v2h-6v2h-2v2h-2v2h-2v-2h-2v-2h-2v-4h2v-2h2v-2h2v-2h2v-2h2v-2h2V0z M32,4h2v2h-2V4z M12,18h2v2h-2V18z M10,20h2v2h-2V20z M8,22h2v6h2v2h6v-2h2v-2h4v2h2v2h2v2h-2v2h-2v2h-4v2h-2v2h-2v-2h-2v-2h-4v2h-2v2H8v-2H6v-4H4v-2H2v-2H0v-6h2v2h2v2h2v-4h2v-2h2V20z M16,38h2v4h-2V38z M24,38h2v2h-2V38z M24,40h2v2h-2V40z M14,42h2v4h-2V42z M14,44h4v2h-4V44z M22,42h2v2h-2V42z"/></svg>
             <!-- Estado: Agachado Cabeza Abajo 1 -->
             <svg id="dino-duck1" class="dino-sprite" viewBox="0 0 59 30"><path fill="#0f0" d="M2,2h4v2H2V2z M0,4h6v2H0V4z M0,6h8v2H0V6z M0,8h10v2H0V8z M0,10h14v2H0V10z M0,12h20v2H0V12z M0,14h24v2H0V14z M0,16h24v2H0V16z M0,18h26v2H0V18z M0,20h22v2H0V20z M2,22h14v2H2V22z M4,24h10v2H4V24z M4,26h2v4H4V26z M12,26h2v2h-2V26z M12,28h4v2h-4V28z M24,6h32v2H24V6z M24,8h34v2H24V8z M24,10h34v2H24V10z M24,12h34v2H24V12z M24,14h30v2H24V14z M24,16h22v2H24V16z M24,18h16v2H24V18z M46,14h2v2h-2V14z M48,12h2v2h-2V12z"/></svg>
@@ -53,7 +110,6 @@
 
         const cactusSVG = `<svg class="cactus" viewBox="0 0 25 50" style="left:600px;"><path fill="#0f0" d="M8,0h6v50H8V0z M4,10h4v14H4V10z M2,14h2v6H2V14z M0,16h2v2H0V16z M14,14h4v18h-4V14z M18,18h2v8h-2V18z M20,20h2v4h-2V20z"/></svg>`;
 
-        // Control de entrada del teclado
         document.addEventListener("keydown", (e) => {
             if (!gameActive && e.code === "Space") { resetGame(); return; }
             
@@ -72,7 +128,7 @@
 
         function jump() {
             isJumping = true;
-            dinoBox.className = "jump";
+            dinoBox.className = "run-1"; 
             let position = 0;
             let upInterval = setInterval(() => {
                 if (position >= 90) {
@@ -81,7 +137,6 @@
                         if (position <= 0) {
                             clearInterval(downInterval);
                             isJumping = false;
-                            if (gameActive) dinoBox.className = "run-1";
                         }
                         position -= 5;
                         dinoBox.style.bottom = position + "px";
@@ -98,7 +153,6 @@
                 dinoBox.classList.add("ducking");
             } else {
                 dinoBox.classList.remove("ducking");
-                if (!isJumping && gameActive) dinoBox.className = "run-1";
             }
         }
 
@@ -114,13 +168,14 @@
         function updateGame() {
             if (!gameActive) return;
 
-            // Animación de las patas corriendo (cambia cada 8 frames)
             animationFrameCount++;
+            
+            // Alternar patas dinámicamente cada 6 ciclos de render
             if (!isJumping) {
                 if (isDucking) {
-                    dinoBox.className = (Math.floor(animationFrameCount / 8) % 2 === 0) ? "ducking duck-1" : "ducking duck-2";
+                    dinoBox.className = (Math.floor(animationFrameCount / 6) % 2 === 0) ? "ducking duck-1" : "ducking duck-2";
                 } else {
-                    dinoBox.className = (Math.floor(animationFrameCount / 8) % 2 === 0) ? "run-1" : "run-2";
+                    dinoBox.className = (Math.floor(animationFrameCount / 6) % 2 === 0) ? "run-legs-1" : "run-legs-2";
                 }
             }
 
@@ -142,17 +197,30 @@
                 let dinoBottom = parseInt(dinoBox.style.bottom) || 0;
                 let cactusHeight = parseInt(cactus.style.height);
                 
-                // Ajuste dinámico de hitbox dependiendo de si está agachado o de pie
-                let dinoHitHeight = isDucking ? 25 : 42;
-                if (currentLeft > 50 && currentLeft < (isDucking ? 95 : 85) && dinoBottom < (cactusHeight - 5)) {
-                    if (dinoBottom + dinoHitHeight > 0) endGame();
+                let hitBoxWidth = isDucking ? 90 : 82;
+                if (currentLeft > 50 && currentLeft < hitBoxWidth && dinoBottom < (cactusHeight - 4)) {
+                    endGame();
                 }
             }
             requestAnimationFrame(updateGame);
         }
 
-        function endGame() { gameActive = false; gameOverText.style.display = "block"; dinoBox.className = "jump"; }
-        function resetGame() { Array.from(container.getElementsByClassName("cactus")).forEach(c => c.remove()); obstacles = []; score = 0; obstacleSpeed = 6; scoreDisplay.innerText = score; gameOverText.style.display = "none"; gameActive = true; updateGame(); }
+        function endGame() { 
+            gameActive = false; 
+            gameOverText.style.display = "block"; 
+            dinoBox.className = "run-1"; 
+        }
+        
+        function resetGame() { 
+            Array.from(container.getElementsByClassName("cactus")).forEach(c => c.remove()); 
+            obstacles = []; 
+            score = 0; 
+            obstacleSpeed = 6; 
+            scoreDisplay.innerText = score; 
+            gameOverText.style.display = "none"; 
+            gameActive = true; 
+            updateGame(); 
+        }
 
         updateGame();
     </script>
